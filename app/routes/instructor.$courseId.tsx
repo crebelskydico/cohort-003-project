@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Link, useFetcher } from "react-router";
+import { toast } from "sonner";
 import type { Route } from "./+types/instructor.$courseId";
 import {
   getCourseById,
@@ -271,6 +272,12 @@ function InlineEditableTitle({
     }
   }, [isEditing]);
 
+  useEffect(() => {
+    if (fetcher.state === "idle" && fetcher.data?.success) {
+      toast.success("Title saved.");
+    }
+  }, [fetcher.state, fetcher.data]);
+
   // Update local state when server responds with new data
   useEffect(() => {
     setEditValue(value);
@@ -349,6 +356,12 @@ function InlineEditableDescription({
         textareaRef.current.scrollHeight + "px";
     }
   }, [isEditing]);
+
+  useEffect(() => {
+    if (fetcher.state === "idle" && fetcher.data?.success) {
+      toast.success("Description saved.");
+    }
+  }, [fetcher.state, fetcher.data]);
 
   useEffect(() => {
     setEditValue(value);
@@ -492,6 +505,12 @@ function DeleteModuleButton({ moduleId, moduleTitle }: { moduleId: number; modul
   const [confirming, setConfirming] = useState(false);
   const fetcher = useFetcher();
 
+  useEffect(() => {
+    if (fetcher.state === "idle" && fetcher.data?.success) {
+      toast.success("Module deleted.");
+    }
+  }, [fetcher.state, fetcher.data]);
+
   if (confirming) {
     return (
       <div className="flex items-center gap-2">
@@ -551,6 +570,7 @@ function AddModuleForm() {
     if (fetcher.state === "idle" && fetcher.data?.success) {
       setTitle("");
       setIsAdding(false);
+      toast.success("Module added.");
     }
   }, [fetcher.state, fetcher.data]);
 
@@ -693,6 +713,12 @@ function DeleteLessonButton({ lessonId, lessonTitle }: { lessonId: number; lesso
   const [confirming, setConfirming] = useState(false);
   const fetcher = useFetcher();
 
+  useEffect(() => {
+    if (fetcher.state === "idle" && fetcher.data?.success) {
+      toast.success("Lesson deleted.");
+    }
+  }, [fetcher.state, fetcher.data]);
+
   if (confirming) {
     return (
       <div className="flex items-center gap-2">
@@ -751,6 +777,7 @@ function AddLessonForm({ moduleId }: { moduleId: number }) {
     if (fetcher.state === "idle" && fetcher.data?.success) {
       setTitle("");
       setIsAdding(false);
+      toast.success("Lesson added.");
     }
   }, [fetcher.state, fetcher.data]);
 
@@ -834,6 +861,12 @@ export default function InstructorCourseEditor({
 }: Route.ComponentProps) {
   const { course, lessonCount, enrollmentCount } = loaderData;
   const statusFetcher = useFetcher();
+
+  useEffect(() => {
+    if (statusFetcher.state === "idle" && statusFetcher.data?.success) {
+      toast.success("Course status updated.");
+    }
+  }, [statusFetcher.state, statusFetcher.data]);
 
   function handleStatusChange(newStatus: string) {
     statusFetcher.submit(

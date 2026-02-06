@@ -13,6 +13,7 @@ import { getAllUsers, getUserById } from "~/services/userService";
 import { getCurrentUserId } from "~/lib/session";
 import { DevUI } from "~/components/dev-ui";
 import { Sidebar } from "~/components/sidebar";
+import { Toaster } from "sonner";
 
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -68,6 +69,7 @@ export default function App({ loaderData }: Route.ComponentProps) {
         <Outlet />
       </main>
       <DevUI users={users} currentUser={currentUser} />
+      <Toaster position="bottom-right" richColors closeButton />
     </div>
   );
 }

@@ -1,4 +1,6 @@
+import { useEffect } from "react";
 import { Link, useFetcher } from "react-router";
+import { toast } from "sonner";
 import type { Route } from "./+types/courses.$slug";
 import { getCourseBySlug, getCourseWithDetails, getLessonCountForCourse } from "~/services/courseService";
 import { isUserEnrolled, enrollUser } from "~/services/enrollmentService";
@@ -89,6 +91,12 @@ export default function CourseDetail({ loaderData }: Route.ComponentProps) {
   const { course, lessonCount, enrolled, progress, lessonProgressMap, currentUserId } = loaderData;
   const fetcher = useFetcher();
   const isEnrolling = fetcher.state !== "idle";
+
+  useEffect(() => {
+    if (fetcher.state === "idle" && fetcher.data?.success) {
+      toast.success("Successfully enrolled in this course!");
+    }
+  }, [fetcher.state, fetcher.data]);
 
   return (
     <div className="p-6 lg:p-8">

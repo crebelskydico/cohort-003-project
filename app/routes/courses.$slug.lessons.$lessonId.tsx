@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useFetcher } from "react-router";
+import { toast } from "sonner";
 import type { Route } from "./+types/courses.$slug.lessons.$lessonId";
 import { getCourseBySlug, getCourseWithDetails } from "~/services/courseService";
 import { getLessonById } from "~/services/lessonService";
@@ -266,6 +267,12 @@ export default function LessonViewer({ loaderData }: Route.ComponentProps) {
     lessonStatus === LessonProgressStatus.Completed ||
     fetcher.data?.success;
 
+  useEffect(() => {
+    if (fetcher.state === "idle" && fetcher.data?.success) {
+      toast.success("Lesson marked as complete!");
+    }
+  }, [fetcher.state, fetcher.data]);
+
   const quizResult = quizFetcher.data?.quizResult ?? null;
   const isSubmittingQuiz = quizFetcher.state !== "idle";
 
@@ -454,6 +461,16 @@ function QuizSection({
   const [selectedAnswers, setSelectedAnswers] = useState<Record<number, number>>({});
   const [showQuiz, setShowQuiz] = useState(!bestAttempt?.passed);
   const [retaking, setRetaking] = useState(false);
+
+  useEffect(() => {
+    if (quizResult && !retaking) {
+      if (quizResult.passed) {
+        toast.success(`Quiz passed! Score: ${Math.round(quizResult.score * 100)}%`);
+      } else {
+        toast.error(`Quiz not passed. Score: ${Math.round(quizResult.score * 100)}%`);
+      }
+    }
+  }, [quizResult, retaking]);
 
   const allAnswered = quiz.questions.every((q) => selectedAnswers[q.id] !== undefined);
   const showResult = quizResult && !retaking;

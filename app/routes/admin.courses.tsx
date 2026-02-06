@@ -1,4 +1,6 @@
+import { useEffect } from "react";
 import { useFetcher } from "react-router";
+import { toast } from "sonner";
 import type { Route } from "./+types/admin.courses";
 import {
   getAllCourses,
@@ -129,6 +131,12 @@ function CourseRow({
   };
 }) {
   const statusFetcher = useFetcher();
+
+  useEffect(() => {
+    if (statusFetcher.state === "idle" && statusFetcher.data?.success) {
+      toast.success("Course status updated.");
+    }
+  }, [statusFetcher.state, statusFetcher.data]);
 
   function handleStatusChange(newStatus: string) {
     statusFetcher.submit(

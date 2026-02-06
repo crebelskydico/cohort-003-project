@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { useFetcher } from "react-router";
+import { toast } from "sonner";
 import type { Route } from "./+types/admin.users";
 import { getAllUsers, updateUser, updateUserRole } from "~/services/userService";
 import { getCurrentUserId } from "~/lib/session";
@@ -155,8 +156,15 @@ function EditableUserRow({
   useEffect(() => {
     if (updateFetcher.state === "idle" && updateFetcher.data?.success) {
       setIsEditing(false);
+      toast.success("User updated successfully.");
     }
   }, [updateFetcher.state, updateFetcher.data]);
+
+  useEffect(() => {
+    if (roleFetcher.state === "idle" && roleFetcher.data?.success) {
+      toast.success("Role updated successfully.");
+    }
+  }, [roleFetcher.state, roleFetcher.data]);
 
   function handleSave() {
     const trimmedName = editName.trim();
