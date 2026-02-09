@@ -78,6 +78,7 @@ async function seed() {
       category_id INTEGER NOT NULL REFERENCES categories(id),
       status TEXT NOT NULL,
       cover_image_url TEXT,
+      price INTEGER NOT NULL DEFAULT 0,
       created_at TEXT NOT NULL,
       updated_at TEXT NOT NULL
     );
@@ -317,6 +318,7 @@ By the end of this course, you'll understand why TypeScript has become the defau
       categoryId: catBySlug["programming"].id,
       status: CourseStatus.Published,
       coverImageUrl: "/images/course-typescript.svg",
+      price: 4999,
       createdAt: daysAgo(90),
       updatedAt: daysAgo(10),
     })
@@ -766,6 +768,7 @@ Every lesson is focused and practical. No 45-minute lectures where 40 minutes ar
       categoryId: catBySlug["programming"].id,
       status: CourseStatus.Published,
       coverImageUrl: "/images/course-nodejs.svg",
+      price: 5999,
       createdAt: daysAgo(75),
       updatedAt: daysAgo(5),
     })

@@ -59,6 +59,7 @@ export const courses = sqliteTable("courses", {
     .references(() => categories.id),
   status: text("status").notNull().$type<CourseStatus>(),
   coverImageUrl: text("cover_image_url"),
+  price: integer("price").notNull().default(0),
   createdAt: text("created_at")
     .notNull()
     .$defaultFn(() => new Date().toISOString()),

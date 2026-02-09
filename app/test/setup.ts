@@ -41,6 +41,7 @@ export function createTestDb() {
     category_id INTEGER NOT NULL REFERENCES categories(id),
     status TEXT NOT NULL,
     cover_image_url TEXT,
+    price INTEGER NOT NULL DEFAULT 0,
     created_at TEXT NOT NULL DEFAULT (datetime('now')),
     updated_at TEXT NOT NULL DEFAULT (datetime('now'))
   )`);
