@@ -18,7 +18,13 @@ import { LessonProgressStatus } from "~/db/schema";
 import { Card, CardContent, CardHeader } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
 import { Skeleton } from "~/components/ui/skeleton";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "~/components/ui/tabs";
+import {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
+  TabsContentNoShift,
+} from "~/components/ui/tabs";
 import {
   AlertTriangle,
   BookOpen,
@@ -236,22 +242,24 @@ export default function CourseDetail({ loaderData }: Route.ComponentProps) {
           Buy for Team
         </TabsTrigger>
       </TabsList>
-      <TabsContent value="self">
-        {priceDisplay}
-        <Link to={selfPurchaseLink}>
-          <Button size="lg" className="w-full">
-            Enroll Now — {pppPriceLabel}
-          </Button>
-        </Link>
-      </TabsContent>
-      <TabsContent value="team">
-        {priceDisplay}
-        <Link to={teamPurchaseLink}>
-          <Button size="lg" variant="outline" className="w-full">
-            Buy for Your Team
-          </Button>
-        </Link>
-      </TabsContent>
+      <TabsContentNoShift>
+        <TabsContent value="self" forceMount>
+          {priceDisplay}
+          <Link to={selfPurchaseLink}>
+            <Button size="lg" className="w-full">
+              Enroll Now — {pppPriceLabel}
+            </Button>
+          </Link>
+        </TabsContent>
+        <TabsContent value="team" forceMount>
+          {priceDisplay}
+          <Link to={teamPurchaseLink}>
+            <Button size="lg" variant="outline" className="w-full">
+              Buy for Your Team
+            </Button>
+          </Link>
+        </TabsContent>
+      </TabsContentNoShift>
     </Tabs>
   );
 

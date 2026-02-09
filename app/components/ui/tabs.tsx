@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { Tabs as TabsPrimitive } from "radix-ui"
+import * as React from "react";
+import { Tabs as TabsPrimitive } from "radix-ui";
 
-import { cn } from "~/lib/utils"
+import { cn } from "~/lib/utils";
 
 function Tabs({
   className,
@@ -15,7 +15,7 @@ function Tabs({
       className={cn("flex flex-col gap-2", className)}
       {...props}
     />
-  )
+  );
 }
 
 function TabsList({
@@ -31,7 +31,7 @@ function TabsList({
       )}
       {...props}
     />
-  )
+  );
 }
 
 function TabsTrigger({
@@ -47,7 +47,7 @@ function TabsTrigger({
       )}
       {...props}
     />
-  )
+  );
 }
 
 function TabsContent({
@@ -60,7 +60,34 @@ function TabsContent({
       className={cn("flex-1 outline-none", className)}
       {...props}
     />
-  )
+  );
 }
 
-export { Tabs, TabsList, TabsTrigger, TabsContent }
+/**
+ * A tabs wrapper that prevents layout shift by keeping all tab panels
+ * mounted and using CSS grid to overlay them. The tallest panel
+ * determines the container height.
+ *
+ * Usage: wrap TabsContent elements in <TabsContentNoShift> instead of
+ * rendering them as direct children of <Tabs>.
+ */
+function TabsContentNoShift({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <div
+      className={cn(
+        "grid [&>[data-slot=tabs-content]]:col-start-1 [&>[data-slot=tabs-content]]:row-start-1 [&>[data-slot=tabs-content][data-state=inactive]]:invisible",
+        className
+      )}
+    >
+      {children}
+    </div>
+  );
+}
+
+export { Tabs, TabsList, TabsTrigger, TabsContent, TabsContentNoShift };

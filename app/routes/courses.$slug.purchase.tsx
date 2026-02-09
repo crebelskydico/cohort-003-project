@@ -17,7 +17,13 @@ import { getCurrentUserId } from "~/lib/session";
 import { CourseStatus } from "~/db/schema";
 import { Card, CardContent } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "~/components/ui/tabs";
+import {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
+  TabsContentNoShift,
+} from "~/components/ui/tabs";
 import { BookOpen, Clock, Users, ArrowLeft, Minus, Plus } from "lucide-react";
 import { CourseImage } from "~/components/course-image";
 import { UserAvatar } from "~/components/user-avatar";
@@ -257,121 +263,124 @@ export default function PurchaseConfirmation({
                 </TabsTrigger>
               </TabsList>
 
-              {/* Buy for Myself */}
-              <TabsContent value="self">
-                <div className="flex items-center justify-between">
-                  <div>
-                    {isDiscounted ? (
-                      <>
-                        <span className="text-sm text-muted-foreground">
-                          Original price
-                        </span>
-                        <div className="text-lg text-muted-foreground line-through">
-                          {formatPrice(course.price)}
-                        </div>
-                        <span className="text-sm text-muted-foreground">
-                          Your price
-                        </span>
-                        <div className="text-3xl font-bold">
-                          {formatPrice(pppPrice)}
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        <span className="text-sm text-muted-foreground">
-                          Total
-                        </span>
-                        <div className="text-3xl font-bold">
-                          {formatPrice(pppPrice)}
-                        </div>
-                      </>
-                    )}
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <Link to={`/courses/${course.slug}`}>
-                      <Button variant="outline">Go Back</Button>
-                    </Link>
-                    <fetcher.Form method="post">
-                      <input
-                        type="hidden"
-                        name="intent"
-                        value="confirm-purchase"
-                      />
-                      <Button size="lg" disabled={isSubmitting}>
-                        {isSubmitting ? "Processing..." : "Confirm Purchase"}
-                      </Button>
-                    </fetcher.Form>
-                  </div>
-                </div>
-              </TabsContent>
-
-              {/* Buy for Your Team */}
-              <TabsContent value="team">
-                <div className="space-y-6">
-                  {/* Quantity selector */}
-                  <div className="flex items-center gap-4">
-                    <span className="text-sm font-medium">Seats</span>
-                    <div className="flex items-center gap-2">
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        className="size-8"
-                        onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                        disabled={quantity <= 1}
-                      >
-                        <Minus className="size-4" />
-                      </Button>
-                      <span className="w-10 text-center text-lg font-semibold">
-                        {quantity}
-                      </span>
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        className="size-8"
-                        onClick={() => setQuantity((q) => q + 1)}
-                      >
-                        <Plus className="size-4" />
-                      </Button>
+              <TabsContentNoShift>
+                {/* Buy for Myself */}
+                <TabsContent value="self" forceMount>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      {isDiscounted ? (
+                        <>
+                          <span className="text-sm text-muted-foreground">
+                            Original price
+                          </span>
+                          <div className="text-lg text-muted-foreground line-through">
+                            {formatPrice(course.price)}
+                          </div>
+                          <span className="text-sm text-muted-foreground">
+                            Your price
+                          </span>
+                          <div className="text-3xl font-bold">
+                            {formatPrice(pppPrice)}
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <span className="text-sm text-muted-foreground">
+                            Total
+                          </span>
+                          <div className="text-3xl font-bold">
+                            {formatPrice(pppPrice)}
+                          </div>
+                        </>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Link to={`/courses/${course.slug}`}>
+                        <Button variant="outline">Go Back</Button>
+                      </Link>
+                      <fetcher.Form method="post">
+                        <input
+                          type="hidden"
+                          name="intent"
+                          value="confirm-purchase"
+                        />
+                        <Button size="lg" disabled={isSubmitting}>
+                          {isSubmitting ? "Processing..." : "Confirm Purchase"}
+                        </Button>
+                      </fetcher.Form>
                     </div>
                   </div>
+                </TabsContent>
 
-                  {/* Price breakdown */}
-                  <div>
-                    <div className="text-sm text-muted-foreground">
-                      {formatPrice(pppPrice)} &times; {quantity}{" "}
-                      {quantity === 1 ? "seat" : "seats"}
+                {/* Buy for Your Team */}
+                <TabsContent value="team" forceMount>
+                  <div className="space-y-6">
+                    {/* Quantity selector */}
+                    <div className="flex items-center gap-4">
+                      <span className="text-sm font-medium">Seats</span>
+                      <div className="flex items-center gap-2">
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          className="size-8"
+                          onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                          disabled={quantity <= 1}
+                        >
+                          <Minus className="size-4" />
+                        </Button>
+                        <span className="w-10 text-center text-lg font-semibold">
+                          {quantity}
+                        </span>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          className="size-8"
+                          onClick={() => setQuantity((q) => q + 1)}
+                        >
+                          <Plus className="size-4" />
+                        </Button>
+                      </div>
                     </div>
-                    <div className="text-3xl font-bold">
-                      {formatPrice(teamTotal)}
+
+                    {/* Price breakdown */}
+                    <div>
+                      <div className="text-sm text-muted-foreground">
+                        {formatPrice(pppPrice)} &times; {quantity}{" "}
+                        {quantity === 1 ? "seat" : "seats"}
+                      </div>
+                      <div className="text-3xl font-bold">
+                        {formatPrice(teamTotal)}
+                      </div>
+                    </div>
+
+                    <p className="text-sm text-muted-foreground">
+                      You&apos;ll receive {quantity} unique coupon{" "}
+                      {quantity === 1 ? "link" : "links"} to share with your
+                      team members. Each link grants one person access to this
+                      course.
+                    </p>
+
+                    <div className="flex items-center gap-3">
+                      <Link to={`/courses/${course.slug}`}>
+                        <Button variant="outline">Go Back</Button>
+                      </Link>
+                      <fetcher.Form method="post">
+                        <input
+                          type="hidden"
+                          name="intent"
+                          value="confirm-team-purchase"
+                        />
+                        <input type="hidden" name="quantity" value={quantity} />
+                        <Button size="lg" disabled={isSubmitting}>
+                          {isSubmitting
+                            ? "Processing..."
+                            : `Buy ${quantity} ${quantity === 1 ? "Seat" : "Seats"}`}
+                        </Button>
+                      </fetcher.Form>
                     </div>
                   </div>
-
-                  <p className="text-sm text-muted-foreground">
-                    You&apos;ll receive {quantity} unique coupon{" "}
-                    {quantity === 1 ? "link" : "links"} to share with your team
-                    members. Each link grants one person access to this course.
-                  </p>
-
-                  <div className="flex items-center gap-3">
-                    <Link to={`/courses/${course.slug}`}>
-                      <Button variant="outline">Go Back</Button>
-                    </Link>
-                    <fetcher.Form method="post">
-                      <input
-                        type="hidden"
-                        name="intent"
-                        value="confirm-team-purchase"
-                      />
-                      <input type="hidden" name="quantity" value={quantity} />
-                      <Button size="lg" disabled={isSubmitting}>
-                        {isSubmitting
-                          ? "Processing..."
-                          : `Buy ${quantity} ${quantity === 1 ? "Seat" : "Seats"}`}
-                      </Button>
-                    </fetcher.Form>
-                  </div>
-                </div>
-              </TabsContent>
+                </TabsContent>
+              </TabsContentNoShift>
             </Tabs>
           </div>
         </CardContent>
